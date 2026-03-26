@@ -1,0 +1,23 @@
+{
+  "name": "4a-auth-hash-salt",
+  "version": "1.0.0",
+  "description": "---",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irishmaiden18/4a-auth-hash-salt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/irishmaiden18/4a-auth-hash-salt/issues"
+  },
+  "homepage": "https://github.com/irishmaiden18/4a-auth-hash-salt#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0"
+  }
+}
