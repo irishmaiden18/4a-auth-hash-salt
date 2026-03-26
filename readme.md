@@ -5,7 +5,7 @@
 ### What this lesson covers:
 
 - What is Bcrypt
-- Concept: How encryption works
+- Concept: How hashing works
 - Hashing
 - Salting
 - Rainbow Table
@@ -29,7 +29,7 @@ Using Bcrypt on the password `myPassword123` would produce something like the fo
 
 `myPassword123` -> `$2y$12$vUw4OU4EAl4w4vC6/lA33OtDSYGhiIdekdT9iOoSs9/ckwrffaEui`
 
-That output can be used to compare against future hashes to see if the original data matches.
+That output is stored and later used to verify a password by comparing hashes.
 
 ### Bcrypt Output Format
 
@@ -48,7 +48,7 @@ The main difference between hashing and salting is that hashing is based on the 
 
 One of the main benefits of salting is that it makes it much more difficult for an attacker to use a pre-computed dictionary, or rainbow table, to crack a large number of hashes. Without a salt, an attacker can use a rainbow table to quickly look up the original password for a given hash. However, with a salt, the attacker would need to create a new rainbow table for each salt value, which is much more time-consuming and difficult.
 
-If a password is weak (meaning it has less character variation, or has less characters overall), it means that the method of hashing the password becomes more easily revealed to someone who wishes to unlock all the passwords available. If a password is strong (meaning more characters, variation, etc.), it becomes more difficult to determine the method of hashing.
+If a password is weak (short, common, or predictable), it is easier for attackers to guess using brute-force or dictionary attacks, even if the hashing algorithm is secure. If a password is strong (meaning more characters, variation, etc.), it becomes more difficult to determine the method of hashing.  With bcrypt, the salt is included inside the final hash string, so it does not need to be stored separately.
 
 ### Rainbow Table
 
@@ -143,7 +143,7 @@ comparePassword("fakePass123");
 // comparePassword("notTheSamePass");
 ```
 
-Notice that bcrypt simply compares the passwords for you. When creating a user, the hashed version of the password is what gets saved to the database. This way, anybody who has access to the database can't learn your password and try it out on different websites.
+Notice that bcrypt does not compare plain text passwords directly. It re-hashes the incoming password using the stored salt and cost factor, then compares the result to the stored hash. When creating a user, the hashed version of the password is what gets saved to the database. This way, anybody who has access to the database can't learn your password and try it out on different websites.
 
 ### Extended Lesson
 
@@ -169,7 +169,7 @@ const measureCostFactorTime = async function() {
 measureCostFactorTime();
 ```
 
-The developer community generally recommends that Cost Factor be increased every 1-2 years. The reason is that, although it makes login/signup take an extra half second or so, that intentional slowdown of `bcrypt` is a _feature_, not a bug, and is, in fact, the big revolution that `bcrypt` brought to password encryption.
+The cost factor should be periodically increased as hardware gets faster, based on acceptable login performance. The reason is that, although it makes login/signup take an extra half second or so, that intentional slowdown of `bcrypt` is a _feature_, not a bug, and is, in fact, the big revolution that `bcrypt` brought to password encryption.
 
 A slower encryption algorithm is actually more secure, as it means that for an attacker to decrypt a database full of passwords, they'll need to spend more compute power and time than is feasible, as long as the algorithm takes enough time for each password on the attacker's hardware. Since hardware gets continuously more powerful, the algorithm must be slowed periodically as well to keep up with the hardware's ability to decrypt passwords faster and faster. In fact, you may have a computer significantly faster than the one this code was originally written on, so you may want to adjust the end point of the loop to get the full slowdown effect!
 
